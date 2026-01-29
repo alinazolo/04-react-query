@@ -12,7 +12,7 @@ const { data } = await axios.get<MovieHttpResponse>(
     {
       params: {
         query: query,
-        page: 1,
+        // page: 1,
         include_adult: false,
         language: 'en-US',
       },

@@ -1,28 +1,65 @@
+import { useEffect } from "react";
 import css from "./MovieModal.module.css";
-export default function MovieModal () {
-    return (
-<div className={css.backdrop} role="dialog" aria-modal="true">
-  <div className={css.modal}>
-    <button className={css.closeButton} aria-label="Close modal">
+import { createPortal } from "react-dom";
+import type { Movie } from "../../types/movie";
+
+interface ModalProps {
+  onClose: () => void;
+  movie: Movie;
+}
+
+export default function MovieModal ({onClose, movie}: ModalProps) {
+  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
+      if (event.target === event.currentTarget) {
+        onClose()
+      }
+    };
+
+    useEffect(() => {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if(e.key === "Escape") {
+          onClose();
+        }
+      };
+      document.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+
+      return() => {
+        document.removeEventListener("keydown", handleKeyDown);
+        document.body.style.overflow = "";
+      };
+    }, [onClose]);
+  
+    return createPortal (
+<div className={css.backdrop} 
+onClick={handleBackdropClick} 
+role="dialog" 
+aria-modal="true">
+  <div className={css.modal} >
+    <button 
+    className={css.closeButton}
+    onClick={onClose} 
+    aria-label="Close modal">
       &times;
     </button>
     <img
-      src="https://image.tmdb.org/t/p/original/backdrop_path"
-      alt="movie_title"
+      src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+      alt={movie.title}
       className={css.image}
     />
     <div className={css.content}>
-      <h2>movie_title</h2>
-      <p>movie_overview</p>
+      <h2>{movie.title}</h2>
+      <p>{movie.overview}</p>
       <p>
-        <strong>Release Date:</strong> movie_release_date
+        <strong>Release Date:n</strong>{movie.release_date}
       </p>
       <p>
-        <strong>Rating:</strong> movie_vote_average/10
+        <strong>Rating: </strong>{movie.vote_average}
       </p>
+      </div>  
     </div>
-  </div>
-</div>
-
-    )
+</div>,
+document.body
+    );
 }
+
