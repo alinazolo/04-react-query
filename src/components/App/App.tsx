@@ -1,7 +1,5 @@
 import './App.css'
-
 import { useState } from "react";
-
 import SearchBar from "../SearchBar/SearchBar";
 import {fetchMovies} from "../../services/movieService";
 import type { Movie } from "../../types/movie";
@@ -9,14 +7,7 @@ import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage"
 import MovieGrid from "../MovieGrid/MovieGrid";
 import MovieModal from '../MovieModal/MovieModal';
-
-
-
 import toast, { Toaster } from 'react-hot-toast';
-
-
-// import { useState } from 'react';
-
 
 
 export default function App() {
@@ -34,6 +25,7 @@ setIsLoading(true);
 const newMovies = await fetchMovies(query);
 
 if (!newMovies.length) {
+  setMovies([]);
   toast.error("No movies found for your request.")
     return;
 }
@@ -44,13 +36,12 @@ console.log(newMovies);
 setIsError(true);
 } finally {
 setIsLoading(false);
-}
-
+} 
 };
 
   return (
      <>
-     <div><Toaster/></div>
+     <Toaster/>
      <SearchBar onSubmit={handleSearch}/>
      {isLoading && <Loader/>}
      {isError && <ErrorMessage/>}
