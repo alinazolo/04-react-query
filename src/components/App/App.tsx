@@ -19,7 +19,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
 const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  const {data, isLoading, isError} =  useQuery({
+  const {data, isLoading, isError, isSuccess} =  useQuery({
     queryKey: ["movies", query, currentPage],
     queryFn: () => fetchMovies(query, currentPage),
     enabled: query.trim().length > 0,
@@ -41,7 +41,7 @@ if(data && data.results.length === 0) {
      <>
      <Toaster/>
      <SearchBar onSubmit={handleSearch}/>
-     {data && data.results.length > 0 && data.total_pages > 1 && ( 
+     {isSuccess && data.results.length > 0 && data.total_pages > 1 && ( 
 <ReactPaginate
 pageCount={data.total_pages}
 pageRangeDisplayed={5}
@@ -57,7 +57,7 @@ renderOnZeroPageCount={null}
 )}
      {isLoading && <Loader/>}
      {isError && <ErrorMessage/>}
-     {data && data.results.length > 0 && <MovieGrid onSelect={setSelectedMovie} movies={data.results}/>}
+     {isSuccess && data && data.results.length > 0 && <MovieGrid onSelect={setSelectedMovie} movies={data.results}/>}
      {selectedMovie && <MovieModal movie={selectedMovie} onClose={() => setSelectedMovie(null)} />}
      </>  
   );
