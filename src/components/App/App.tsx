@@ -57,7 +57,7 @@ renderOnZeroPageCount={null}
 )}
      {isLoading && <Loader/>}
      {isError && <ErrorMessage/>}
-     {data && data.results.length > 0 && <MovieGrid onSelect={setSelectedMovie} results={data.results}/>}
+     {data && data.results.length > 0 && <MovieGrid onSelect={setSelectedMovie} movies={data.results}/>}
      {selectedMovie && <MovieModal movie={selectedMovie} onClose={() => setSelectedMovie(null)} />}
      </>  
   );
