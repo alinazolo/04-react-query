@@ -2,13 +2,13 @@ import axios from 'axios';
 
 import type { Movie } from "../types/movie";
  
-interface MovieHttpResponse {
-    results: Movie[];
-    nbPages: number;
+interface MoviesResponse {
+   results: Movie[];
+  total_pages: number;
 }
 
-export const fetchMovies = async(query: string, page: number): Promise<Movie[]> => {
-const { data } = await axios.get<MovieHttpResponse>(
+export const fetchMovies = async(query: string, page: number): Promise<MoviesResponse> => {
+const { data } = await axios.get<MoviesResponse>(
     `https://api.themoviedb.org/3/search/movie`,
     {
       params: {
@@ -21,5 +21,5 @@ const { data } = await axios.get<MovieHttpResponse>(
       },
     }
 );
-return data.results;
+return data;
 };
